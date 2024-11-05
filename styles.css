@@ -7,7 +7,7 @@ background-color: #333;
 }
 
 li {
-float: left;
+float: right;
 }
 
 li a {
@@ -16,12 +16,25 @@ color: white;
 text-align: center;
 padding: 14px 16px;
 text-decoration: none;
+font-family: "Verdana", serif;
 }
 
 li a:hover {
 background-color: #111;
 }
 
-font {
+h1 {
+    font-family: "Verdana", serif;
+    padding: 10px 50px 0px 50px
+}
+h2 {
+    font-family: "Verdana", serif;
+    padding: 0px 50px 10px 50px
+}
+h3 {
+    font-family: "Verdana", serif;
+   
+}
+h4 {
     font-family: "Verdana", serif;
 }
