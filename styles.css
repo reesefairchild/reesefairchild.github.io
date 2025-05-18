@@ -6,6 +6,10 @@ overflow: hidden;
 background-color: #333;
 }
 
+ul_1 {
+    font-family: "Verdana", serif;
+}
+
 li {
 float: right;
 }
@@ -48,6 +52,33 @@ p {
     font-family: "Verdana", serif;
 }
 
-.div-1 {
-    float: left;
+div {
+  background-color: #d7c3db;   /* Light gray background (change as needed) */
+  border-radius: 12px;         /* Controls the roundness of the corners */
+  padding: 16px;               /* Adds space inside the div */
+  margin: 16px 0;              /* Adds space above and below each div */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Optional: subtle shadow */
+}
+
+.no-style-1 {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  float: left;
+}
+
+#plain-div {
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.clearfix::after {
+    content: "";
+    display: block;
+    clear: both;
 }
