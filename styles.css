@@ -58,6 +58,7 @@ div {
   padding: 16px;               /* Adds space inside the div */
   margin: 16px 0;              /* Adds space above and below each div */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Optional: subtle shadow */
+  font-family: "Verdana", serif;
 }
 
 .no-style-1 {
