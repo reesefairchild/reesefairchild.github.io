@@ -7,7 +7,7 @@
 <meta name="keywords" content="University of Washington, CS, MATH, Reese, Fairchild, Research">
 <meta name="author" content="Reese Fairchild">
 <title>Reese Fairchild</title>
-<link rel="icon" type="image/x-icon" href="RF (3).png">
+<link rel="icon" type="image/x-icon" href="pics/RF (3).png">
 
 <!-- Google Font -->
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -54,10 +54,10 @@
     <div class="row align-items-start">
         <!-- Picture and Logos -->
         <div class="col-md-3 text-center text-md-start mb-3 mb-md-0">
-            <img src="rf-headshot-square.jpg" alt="Reese Fairchild Headshot" class="headshot">
+            <img src="pics/rf-headshot-square.jpg" alt="Reese Fairchild Headshot" class="headshot">
             <div class="logo-row d-flex justify-content-center justify-content-md-start">
-                <img src="q++logo.png" alt="Q++ Logo">
-                <img src="uqp0ukaq.png" alt="Gen1 Logo">
+                <img src="pics/q++logo.png" alt="Q++ Logo">
+                <img src="pics/firstgenUW.png" alt="Gen1 Logo">
             </div>
         </div>
 
@@ -67,12 +67,7 @@
             <h5 class="mb-3">University of Washington Computer Science and Mathematics<br>Undergraduate Researcher</h5>
 
             <h4>News</h4>
-            <ul class="list-unstyled">
-                <li class="news-item">(June 2025) I am honored to accept the Class of 2016 Endowed Impact and Diversity Scholarship and the Gesa Continuing Education Scholarship!</li>
-                <li class="news-item">(April 2025) I will be spending my summer at Tunghai University, researching biochemical optimization while advised by <a href="https://chemeng.thu.edu.tw/web/teacher/detail_teacher.php?id=40" target="_blank">Dr. Ta-Chen Lin</a>.</li>
-                <li class="news-item">(Jan. 2025) Began a Human-AI Interaction research project advised by <a href="https://homes.cs.washington.edu/~leibatt/bio.html" target="_blank">Dr. Leilani Battle</a>.</li>
-                <li class="news-item">(Sept. 2024) I have begun study at the Paul G. Allen School of Computer Science</li>
-                <li class="news-item">(June 2024) Graduated from Columbia Basin College with an AA in Arts and Sciences <i>with High Honors</i>.</li>
+            <ul class="list-unstyled" id="news-list">
             </ul>
         </div>
     </div>
@@ -94,6 +89,18 @@
     </div>
 </footer>
 
+<!--Autoload news from the txt!-->
+<script>
+fetch("news/news.txt")
+    .then(response => response.text())
+    .then(text => {
+        const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
+        const lastFive = lines.slice(-5);
+        const reversed = lastFive.reverse().join("\n");
+        document.getElementById("news-list").innerHTML = reversed +
+            '<li><a href="news/news_page.html" target="_blank"><i>See more news</i></a></li>';
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
