@@ -4,4 +4,4 @@
 <li class="news-item">(April 2025) I will be spending my summer at Tunghai University, researching biochemical optimization while advised by <a href="https://chemeng.thu.edu.tw/web/teacher/detail_teacher.php?id=40" target="_blank">Dr. Ta-Chen Lin</a>.</li>
 <li class="news-item">(June 2025) I am honored to accept the Class of 2016 Endowed Impact and Diversity Scholarship and the Gesa Continuing Education Scholarship!</li>
 <li class="news-item">(Dec. 2025) I am going to be a Section Lead for CSE 121 next quarter!</li>
-<li class="news-item">(Jan. 2026) Check out my Taiwan blog <a href="https://reesefairchild.github.io/pages/taiwan25.html" target="_blank">here</a>!</li>
+<li class="news-item">(Jan. 2026) Check out my Taiwan blog <a href="/pages/taiwan25.html" target="_blank">here</a>!</li>
