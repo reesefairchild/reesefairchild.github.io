@@ -24,9 +24,42 @@
     .navbar .nav-link { color: #fff !important; }
     .navbar .nav-link:hover { color: #bbb !important; }
     h1, h2, h3, h4, h5, h6, p, a { font-family: 'Roboto', sans-serif; }
-    .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 30px; }
-    .section-card h3 { margin-bottom: 15px; }
+    .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
+    .section-card h3 { margin-bottom: 10px; }
     i {color: #5f5c5c;}
+    .project-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: transform .2s ease, box-shadow .2s ease;
+        height: 100%;
+    }   
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .project-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .project-card .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card p {
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+
+    .project-card a.btn {
+        align-self: flex-start;
+    }
 </style>
 </head>
 <body>
@@ -49,22 +82,89 @@
     </div>
 </nav>
 
+<div class="container my-5">
+    <h3>Personal Projects</h3>
+        <!-- GitHub Blurb -->
+        <p class="mt-4">
+            Most projects on this page are just for fun and personal practice; they are not particularly large and were made as little passion projects, outside of work or research.
+            I provide them here to be helpful little tools, fun apps, or inspiration for others. <em>Most</em> code is open source on my
+            <a href="https://github.com/reesefairchild" target="_blank">GitHub</a> and can be used under the MIT License.
+        </p>
+</div>
+
 <!-- Main Content -->
 <div class="container my-5">
-    <div class="row g-4">
+    <!-- Highlighted Projects Row -->
+    <div class="section-card">
+        <h5>Highlighted Projects</h5>
+        <i>Projects that I'm especially proud of (or currently working on).</i>
 
-        
-        <div class="col-md-6">
-            <!-- Small Card 1 -->
-            <div class="section-card mb-4">
-                <h5>Highlighted Projects</h5>
-                <i>projects that I think are the most neat (or that I am currently working on)<br><br></i>
-                <h5><a href="https://reesefairchild.github.io/uw-cs-collab-graph/" target="_blank">UW CS Collab Graph</a></h5>
-                <p>An interactive visualization of paper collaboration between faculty in the University of Washington Computer Science department.</p>
-            
+        <div class="row g-4 mt-2">
+
+            <!-- Hoshi -->
+            <div class="col-lg-6">
+                <div class="card project-card">
+
+                    <img src="pics/hoshi.png"
+                        alt="Hoshi Screenshot">
+
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            Hoshi
+                        </h4>
+
+                        <p class="card-text">
+                            A visualizer for AniList profiles featuring interactive
+                            statistics and personalized viewing insights.
+                        </p>
+
+                        <a class="btn btn-dark"
+                        href="https://reesefairchild.github.io/Hoshi/"
+                        target="_blank">
+                            Visit Project
+                        </a>
+
+                    </div>
+                </div>
             </div>
 
-            <!-- Small Card 2 -->
+            <!-- UW Graph -->
+            <div class="col-lg-6">
+                <div class="card project-card">
+
+                    <img src="pics/collab.png"
+                        alt="UW CS Collaboration Graph">
+
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            UW CS Collaboration Graph
+                        </h4>
+
+                        <p class="card-text">
+                            Interactive visualization of collaboration networks
+                            among University of Washington Computer Science faculty
+                            based on published research papers.
+                        </p>
+
+                        <a class="btn btn-dark"
+                        href="https://reesefairchild.github.io/uw-cs-collab-graph/"
+                        target="_blank">
+                            Visit Project
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Course Projects and Mini Projects Row -->
+    <div class="row g-4">
+        <!-- Course Projects -->
+        <div class="col-md-6">
             <div class="section-card">
                 <h5>Course Projects</h5>
                 <i>public work from my classes<br><br></i>
@@ -79,7 +179,7 @@
             </div>
         </div>
 
-        <!-- big card -->
+        <!-- Mini Projects/Tools/Sites -->
         <div class="col-md-6">
             <div class="section-card">
                 <h5>Mini Projects/Tools/Sites</h5>
@@ -93,9 +193,6 @@
                 <h5><a href="https://reesefairchild.github.io/PDFMergerFree/" target="_blank">PDF Merger Free</a></h5>
                 <p>A very simple, free PDF merger tool.</p>
 
-                <h5><a href="https://reesefairchild.github.io/CountryGenerator/" target="_blank">Random Country Explorer</a></h5>
-                <p>A tool to randomly view countries, some of their statistics, and their Wiki pages. Uses the REST Countries API.</p>
-
                 <h5><a href="https://pypi.org/project/sorting-suite/" target="_blank">sorting-suite</a></h5>
                 <p>A python library of numerical sorts for lists. Provides a variety of sorting algorithms and helper methods.</p>
                 
@@ -105,13 +202,6 @@
         </div>
 
     </div>
-
-    <!-- GitHub Blurb -->
-    <p class="mt-4">
-        Projects on this page are just for fun and personal practice; they are not particularly large and were made as little passion projects.
-        I provide them here to be helpful little tools, fun apps, or inspiration for others. <em>Most</em> code is open source on 
-        <a href="https://github.com/reesefairchild" target="_blank">Github</a> and can be used under the MIT License.
-    </p>
 </div>
 
 
