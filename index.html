@@ -27,6 +27,41 @@
     .top-section img.headshot { max-width: 200px; border-radius: 50%; margin-bottom: 1rem; }
     .logo-row img { height: 50px; margin-right: 15px; }
     .news-item { margin-bottom: 0.5rem; }
+    .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
+    .section-card h3 { margin-bottom: 10px; }
+    .project-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: transform .2s ease, box-shadow .2s ease;
+        height: 100%;
+    }   
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .project-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .project-card .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card p {
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+
+    .project-card a.btn {
+        align-self: flex-start;
+    }
 </style>
 </head>
 <body>
@@ -63,6 +98,7 @@
 
         <!-- Name, Titles, News -->
         <div class="col-md-9">
+            <!-- Name and Titles -->
             <h1 class="text-primary mb-1">Reese Fairchild</h1>
             <h5 class="mb-3">University of Washington Computer Science and Mathematics<br>Undergraduate Researcher</h5>
             <h4>About Me</h4>
@@ -73,6 +109,45 @@
                 I'm currently in Tokyo, doing research with the amazing IIS Lab!<br><br>
                 This site is mostly an interactive CV, so feel free to poke around. If you have any questions, want to chat, or have a research opportunity, please don't hesitate to reach out (contact info at the bottom of the page).
             </p>
+
+            <!-- Highlighted Projects Row -->
+            <div class="section-card">
+                <h5>Highlighted + Current Research</h5>
+                <i>Learn more in the "Research" tab!</i>
+
+                <div class="row g-4 mt-2">
+
+                    <!-- Compass -->
+                    <div class="col-lg-6">
+                        <div class="card project-card">
+
+                            <img src="pics/compass.png"
+                                alt="Compass Screenshot">
+
+                            <div class="card-body">
+
+                                <h4 class="card-title">
+                                    Automated Research Onboarding Aid
+                                </h4>
+
+                                <p class="card-text">
+                                    Utilizing AI to help new researchers identify and explore their the gaps in their knowledge and situate themselves into their research team.
+                                </p>
+
+                                <a class="btn btn-dark"
+                                href="https://reesefairchild.github.io/posters/COMPASS-5-26.pdf"
+                                target="_blank">
+                                    Poster
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- News Section -->
             <h4>News</h4>
             <ul class="list-unstyled" id="news-list">
             </ul>
@@ -106,7 +181,7 @@ fetch("news/news.txt")
         const lastFive = lines.slice(-5);
         const reversed = lastFive.reverse().join("\n");
         document.getElementById("news-list").innerHTML = reversed +
-            '<li><a href="news/news_page.html" target="_blank"><i>See more news</i></a></li>';
+            '<li><a href="news/news_page.html"><i>News Archive</i></a></li>';
     });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
