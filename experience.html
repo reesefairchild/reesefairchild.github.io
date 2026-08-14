@@ -26,6 +26,34 @@
     h1, h2, h3, h4, h5, h6, p, a { font-family: 'Roboto', sans-serif; }
     .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 30px; }
     .section-card h3 { margin-bottom: 15px; }
+    .info-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 15px;
+    }
+
+    .info-table tr {
+        border-bottom: none;
+        
+    }
+
+    .info-table:last-child tr {
+        border-bottom: none;
+    }
+
+    .info-left {
+        width: 150px;
+        padding: 15px 20px 15px 0;
+        vertical-align: top;
+        border-right: 1px solid #ccc;
+        color: #666;
+    }
+
+    .info-right {
+        padding: 15px 0 15px 20px;
+        vertical-align: top;
+        line-height: 1.5;
+    }
 </style>
 </head>
 <body>
@@ -54,82 +82,188 @@
     <!-- Education -->
     <div class="section-card">
         <h3><i>Education</i></h3>
-        <p>
-            <b>University of Washington</b><br>
-            Seattle, WA (Sept. 2024 - Current)<br>
-            Planned: BS in Computer Science, BA in Mathematics
-        </p>
-        <p>
-            <b>Columbia Basin College</b><br>
-            Pasco, WA (Sept. 2022 - June 2024)<br>
-            Associate in Arts and Sciences <i>with High Honors</i>
-        </p>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Sept. 2024 – Present
+                </td>
+                <td class="info-right">
+                    <b>University of Washington, Seattle, WA</b><br>
+                    Bachelor of Science in Computer Science (Planned)<br>
+                    Bachelor of Art in Mathematics (Planned)
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Sept. 2022 – June 2024
+                </td>
+                <td class="info-right">
+                    <b>Columbia Basin College, Pasco, WA</b><br>
+                    Associate in Arts and Sciences <i>with High Honors</i>
+                </td>
+            </tr>
+        </table>
     </div>
+
 
     <!-- Teaching -->
     <div class="section-card">
         <h3><i>Teaching</i></h3>
-        <p>
-            <b>Undergraduate Teaching Assistant</b><br>
-            University of Washington, Allen School of Computer Science (Sept. 2025 - Current)<br>
-            Courses Taught:<br>
-            - CSE 121: Introduction to Computer Programming I (Autumn 2025; Professors: Weichert, Wortzman)<br>
-            - CSE 121: Introduction to Computer Programming I - <b>Section Lead TA</b> (Winter 2026; Professor: Natsuhara)<br>
-            - CSE 121: Introduction to Computer Programming I - <b>Section Lead TA</b> (Spring 2026; Professor: Wang)
-        </p>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Sept. 2025 – Present
+                </td>
+                <td class="info-right">
+                    <b>Undergraduate Teaching Assistant</b><br>
+                    Paul G. Allen School of Computer Science, University of Washington, Seattle, WA<br>
+
+                    <b>Courses Taught:</b><br>
+                    <ul>
+                        <li>CSE 121: Introduction to Computer Programming I</li>
+                           <ul>
+                               <li> Autumn 2025 (Professors: Weichert, Wortzman)</li>
+                               <li> Winter 2026, <b>Section Lead TA</b> (Professor: Natsuhara)</li>
+                               <li> Spring 2026, <b>Section Lead TA</b> (Professor: Wang)</li>
+                           </ul>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Honors, Awards, and Scholarships -->
+    <div class="section-card">
+        <h3><i>Recognition</i></h3>
+
+            <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Scholarships
+                </td>
+                <td class="info-right">
+                    <b>Lee Prock Endowed Scholarship</b>,
+                    UW CSE Scholarships (July 2026)<br>
+
+                    <b>Gamma Mu Scholarship</b>,
+                    Gamma Mu Foundation (July 2026)<br>
+
+                    <b>Point Persistence Scholarship</b>,
+                    Point Foundation (Dec. 2025)<br>
+
+                    <b>SEIU Local 1948 Scholarship</b>,
+                    Public School Employees of Washington (July 2025)<br>
+
+                    <b>Class of 2016 Endowed Impact and Diversity Scholarship</b>,
+                    UW Alumni and Class Gift Scholarships (June 2025)<br>
+
+                    <b>Continuing Education Scholarship</b>,
+                    Gesa Foundation (May 2025)<br>
+
+                    <b>Baccalaureate Scholarship</b>,
+                    Washington State Opportunity Scholars (Sept. 2024)<br>
+
+                    <b>Burger King Scholarship</b>,
+                    BK Scholars (April 2024)
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Honors
+                </td>
+                <td class="info-right">
+                    <b>Dean's List (All Attended Quarters)</b>, University of Washington
+                    (Sept. 2024 – Current)<br>
+
+                    <b>Graduated with High Honors</b>, Columbia Basin College
+                    (June 2024)<br>
+
+                    <b>President's Honor Roll (All Attended Quarters)</b>, Columbia Basin College
+                    (Sept. 2022 – June 2024)
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Awards
+                </td>
+                <td class="info-right">
+                    <b>National Rural and Small-Town Recognition Award</b>,
+                    The College Board (Oct. 2023)
+                </td>
+            </tr>
+        </table>
     </div>
 
     <!-- Leadership and Service -->
     <div class="section-card">
         <h3><i>Leadership and Service</i></h3>
-        <p>
-            <b>Student Organizations</b><br>
-            - Co-Chair - Q++, University of Washington (June 2025 - Current)<br>
-            - Secretary - Q++, University of Washington (Sept. 2024 - June 2025)<br>
-            - Secretary - Japanese Culture Club, Columbia Basin College (Oct. 2023 - June 2024)
-        </p>
-        <p>
-            <b>Community Service</b><br>
-            - Volunteer Reading Tutor, KSD Team Read (Oct. 2022 - June 2024)<br>
-            - Volunteer, National Honor Society (Nov. 2022 - June 2024)
-        </p>
-        <p>
-            <b>University Service</b><br>
-            - Undergraduate Researcher Panelist, UW CSE 390R Research Course (Nov. 2025)
-        </p>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Student Organizations
+                </td>
+                <td class="info-right">
+                    <b>Co-Chair</b>, Q++ - LGBTQ+ CS Affinity Group at UW (June 2025 – Present)<br>
+
+                    <b>Secretary</b>, Q++ - LGBTQ+ CS Affinity Group at UW (Sept. 2024 – June 2025)<br>
+
+                    <b>Secretary</b>, Columbia Basin College Japanese Culture Club (Oct. 2023 – June 2024)
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    Community Service
+                </td>
+                <td class="info-right">
+                    <b>Volunteer Reading Tutor</b>, Kennewick School District Team Read
+                    (Oct. 2022 – June 2024)<br>
+
+                    <b>Volunteer</b>, National Honor Society
+                    (Nov. 2022 – June 2024)
+                </td>
+            </tr>
+        </table>
+
+        <table class="info-table">
+            <tr>
+                <td class="info-left">
+                    University Service
+                </td>
+                <td class="info-right">
+                    <b>Undergraduate Researcher Panelist</b>,
+                    UW CSE 390R Research Course (Nov. 2025)
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <!-- Honors, Awards, Scholarships -->
-    <div class="section-card">
-        <h3><i>Honors, Awards, and Scholarships</i></h3>
-        <p>
-            <b>Honors and Awards</b><br>
-            - Dean's List, University of Washington (All Attended Quarters, Sept. 2024 - Current)<br>
-            - Graduated with High Honors, Columbia Basin College (June 2024)<br>
-            - President's Honor Roll, Columbia Basin College (All Attended Quarters, Sept. 2022 - June 2024)<br>
-            - National Rural and Small-Town Recognition Award, The College Board (Oct. 2023)
-        </p>
-        <p>
-            <b>Scholarships</b><br>
-            - Lee Prock Endowed Scholarship, UW CSE Scholarships (July 2026)<br>
-            - Gamma Mu Scholarship, Gamma Mu Foundation (July 2026)<br>
-            - Point Persistence Scholarship, Point Foundation (Dec. 2025)<br>
-            - SEIU Local 1948 Scholarship, Public School Employees of Washington (July 2025)<br>
-            - Class of 2016 Endowed Impact and Diversity Scholarship, UW Alumni and Class Gift Scholarships (June 2025)<br>
-            - Continuing Education Scholarship, Gesa Foundation (May 2025)<br>
-            - Baccalaureate Scholarship, Washington State Opportunity Scholars (Sept. 2024)<br>
-            - Burger King Scholarship, BK Scholars (April 2024)
-        </p>
-    </div>
-
+    <!-- Certifications -->
     <div class="section-card">
         <h3><i>Certifications</i></h3>
+
         <p>
-            - Career Essentials in GitHub Professional Certificate, GitHub (Dec. 2025) <br>
-            - Machine Learning Statistical Foundations Professional Certificate, Wolfram Research (Dec. 2024) <br>
-            - Microsoft Office 2019 Specialist: Associate, Microsoft (March 2022) <br>
+        <b>Career Essentials in GitHub Professional Certificate</b>, GitHub (Dec. 2025)<br>
+        <b>Machine Learning Statistical Foundations Professional Certificate</b>, Wolfram Research (Dec. 2024)<br>
+        <b>Microsoft Office 2019 Specialist: Associate</b>, Microsoft (March 2022)
         </p>
     </div>
+
+    <p><i>See "Research" page for information on my research experience.</i></p>
 
 </div>
 
