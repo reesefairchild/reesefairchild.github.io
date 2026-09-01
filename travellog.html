@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reese's Travel Log</title>
+<link rel="icon" type="image/x-icon" href="pics/RF (3).png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #69a4e7;
+    --panel: #0557a8;
+    --land: #7C7566;
+    --ink: #000000;
+    --ink-dim: #121e2c;
+    --amber: #f02323;
+    --amber-dim: #ef6262;
+    --rule: rgba(243, 239, 230, 0.16);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  body {
+    font-family: 'Space Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    line-height: 1.5;
+  }
+
+  .log {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 3rem;
+  }
+
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 1.1rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .masthead h1 {
+    font-family: "Times New Roman", Times, serif;
+    font-style: bold;
+    font-weight: 600;
+    font-size: clamp(1.8rem, 4.2vw, 2.6rem);
+    letter-spacing: -0.01em;
+    margin: 0 0 0.5rem;
+  }
+
+  .masthead p {
+    margin: 0;
+    font-size: 0.78rem;
+    color: var(--ink-dim);
+    max-width: 46ch;
+  }
+
+  .chart-frame {
+    position: relative;
+    background: var(--panel);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  #flight-map {
+    width: 100%;
+    line-height: 0;
+  }
+
+  #flight-map svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  svg text.airport-label {
+    font-family: 'Space Mono', monospace;
+    user-select: none;
+  }
+
+  svg text.airport-label.has-note {
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+  }
+
+  .timeline { margin-top: 1.3rem; }
+
+  .slider-wrap {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: 0.85rem;
+  }
+
+  .timeline-edge {
+    font-size: 0.68rem;
+    color: var(--ink-dim);
+    white-space: nowrap;
+    padding-bottom: 0.15rem;
+  }
+
+  .slider-track {
+    position: relative;
+    padding-top: 1.5rem;
+  }
+
+  .slider-selected {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.68rem;
+    color: var(--amber);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .slider {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    height: 3px;
+    border-radius: 999px;
+    --p: 100%;
+    background: linear-gradient(to right,
+      var(--amber) 0%, var(--amber) var(--p),
+      rgba(243, 239, 230, 0.15) var(--p), rgba(243, 239, 230, 0.15) 100%);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--amber);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--amber-dim);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--amber);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 1px var(--amber-dim);
+    cursor: pointer;
+  }
+
+  .slider:hover::-webkit-slider-thumb { transform: scale(1.15); }
+  .slider:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--ink); }
+
+  .readout {
+    text-align: right;
+    font-size: 0.74rem;
+    color: var(--ink-dim);
+    margin: 1rem 0 0;
+    line-height: 1.6;
+  }
+
+  .hint {
+    text-align: right;
+    font-size: 0.66rem;
+    color: var(--ink-dim);
+    opacity: 0.75;
+    margin: 0.3rem 0 0;
+  }
+
+  @media (max-width: 600px) {
+    .log { padding: 1.6rem 1rem 2.2rem; }
+  }
+</style>
+</head>
+<body>
+<main class="log">
+  <header class="masthead">
+    <h1>Reese's Travel Log</h1>
+    <p>Tracking my journeys for school, research or fun! Drag the slider to travel back in time, or hover over airports for details.</p>
+  </header>
+
+  <div class="chart-frame">
+    <div id="flight-map"></div>
+  </div>
+
+  <div class="timeline">
+    <div class="slider-wrap">
+      <span id="flight-timeline-start" class="timeline-edge"></span>
+      <div class="slider-track">
+        <div id="flight-slider-selected" class="slider-selected"></div>
+        <input id="flight-slider" class="slider" type="range">
+      </div>
+      <span id="flight-timeline-end" class="timeline-edge">Now</span>
+    </div>
+  </div>
+
+  <p id="mileage" class="readout">Loading…</p>
+  <p style="font-size: 0.6rem;"><i>Inspired by the wonderful flight map found on <a target="_blank" href="https://donghoon.io/fun/">Donghoon Shin's site!</a></i></p>
+</main>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://unpkg.com/topojson@3"></script>
+
+<script>
+(function () {
+  "use strict";
+
+  const flights = [
+        { "from": "SEA", "to": "TPE", "date": "2025-07-11", "flight_code": "DL69" },
+        { "from": "TPE", "to": "SEA", "date": "2025-09-06", "flight_code": "DL68" },
+        { "from": "SEA", "to": "PSC", "date": "2026-09-06", "flight_code": "AS3280" },
+        { "from": "SEA", "to": "HND", "date": "2026-06-20", "flight_code": "DL167" },
+        { "from": "HND", "to": "SEA", "date": "2026-08-14", "flight_code": "DL166" },
+        { "from": "PSC", "to": "SEA", "date": "2024-12-01", "flight_code": "AS3440" },
+        { "from": "SEA", "to": "PSC", "date": "2024-11-27", "flight_code": "AS2409" },
+        { "from": "PSC", "to": "SEA", "date": "2025-01-02", "flight_code": "AS3351" },
+        { "from": "SEA", "to": "PSC", "date": "2024-12-14", "flight_code": "AS1022" },
+        { "from": "SEA", "to": "PSC", "date": "2025-03-20", "flight_code": "AS1022" },
+        { "from": "SEA", "to": "PSC", "date": "2025-12-13", "flight_code": "AS2016" },
+        { "from": "PSC", "to": "SEA", "date": "2026-01-03", "flight_code": "AS2366" },
+        { "from": "SEA", "to": "PSC", "date": "2026-03-20", "flight_code": "AS2100" },
+  ].map(flight => ({ ...flight, parsedDate: new Date(`${flight.date}T12:00:00`) }));
+
+  const AIRPORT_NOTES = {
+    "SEA":"Undergrad @ University of Washington (2024-27)",
+    "HND":"Research Internship @ University of Tokyo, Tokyo (2026)",
+    "PSC":"Hometown + Associates @ Columbia Basin College (2022-24)",
+    "TPE":"Research Internship @ Tunghai University, Taichung (2025)",
+  };
+
+  const csvURL = "https://raw.githubusercontent.com/lxndrblz/Airports/main/airports.csv";
+  const worldURL = "https://unpkg.com/world-atlas@2.0.2/countries-110m.json";
+
+  const container = d3.select("#flight-map");
+  const slider = d3.select("#flight-slider");
+  const sliderSelected = d3.select("#flight-slider-selected");
+  const timelineStartLabel = d3.select("#flight-timeline-start");
+  const timelineEnd = d3.select("#flight-timeline-end");
+  const mileageEl = d3.select("#mileage");
+
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const routeAnimationMs = reduceMotion ? 0 : 800;
+  const labelAnimationMs = reduceMotion ? 0 : 250;
+
+  const timelineStart = new Date(Math.min(...flights.map(f => f.parsedDate)));
+  const timelineEndDate = new Date(Math.max(...flights.map(f => f.parsedDate)));
+  const millisPerDay = 24 * 60 * 60 * 1000;
+  const sliderMax = Math.max(0, Math.floor((timelineEndDate - timelineStart) / millisPerDay));
+  const sliderThumbSize = 14;
+
+  let svg, projection, path, coordLookup = {}, labelLayer, markerLayer, routeLayer;
+  let cachedWorld = null;
+  let currentSelectedDate = timelineEndDate;
+
+  function haversineDistance(coord1, coord2) {
+    const toRad = d => d * Math.PI / 180;
+    const R = 3958.8;
+    const [lon1, lat1] = coord1;
+    const [lon2, lat2] = coord2;
+    const dLat = toRad(lat2 - lat1);
+    const dLon = toRad(lon2 - lon1);
+    const a = Math.sin(dLat / 2) ** 2 +
+      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c * 1.025;
+  }
+
+  function formatTimelineDate(date) {
+    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
+  }
+
+  function sliderValueToDate(value) {
+    return new Date(timelineStart.getTime() + Number(value) * millisPerDay);
+  }
+
+  function routeKey(from, to) {
+    return [from, to].sort().join("-");
+  }
+
+  function updateSelectedDateBubble(selectedDate) {
+    const min = Number(slider.attr("min")) || 0;
+    const max = Number(slider.attr("max")) || 1;
+    const value = Number(slider.property("value")) || 0;
+    const percent = max === min ? 0 : (value - min) / (max - min);
+    const sliderWidth = slider.node().offsetWidth || 0;
+    const leftPx = sliderWidth <= sliderThumbSize
+      ? sliderWidth / 2
+      : percent * (sliderWidth - sliderThumbSize) + sliderThumbSize / 2;
+
+    sliderSelected.text(formatTimelineDate(selectedDate)).style("left", `${leftPx}px`);
+    slider.style("--p", `${(percent * 100).toFixed(3)}%`);
+  }
+
+  function buildArcPath(d) {
+    const from = projection(coordLookup[d.from]);
+    const to = projection(coordLookup[d.to]);
+    if (!from || !to) return null;
+
+    const dx = to[0] - from[0];
+    const dy = to[1] - from[1];
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const curvature = Math.min(50, distance / 4);
+    const mid = [(from[0] + to[0]) / 2, (from[1] + to[1]) / 2 - curvature];
+
+    return d3.line().curve(d3.curveBasis)([from, mid, to]);
+  }
+
+  function updateRouteVisibility(selectedDate) {
+    if (!routeLayer || !labelLayer || !markerLayer) return;
+    currentSelectedDate = selectedDate;
+
+    const visibleFlights = flights.filter(flight => flight.parsedDate <= selectedDate);
+    const routeCount = {};
+    let totalMiles = 0;
+
+    for (const flight of visibleFlights) {
+      const key = routeKey(flight.from, flight.to);
+      routeCount[key] = (routeCount[key] || 0) + 1;
+      const fromCoord = coordLookup[flight.from];
+      const toCoord = coordLookup[flight.to];
+      if (fromCoord && toCoord) totalMiles += haversineDistance(fromCoord, toCoord);
+    }
+
+    const routes = routeLayer.selectAll("path")
+      .data(visibleFlights, flight => `${flight.from}-${flight.to}-${flight.date}`);
+
+    routes.exit().interrupt().transition().duration(labelAnimationMs).style("opacity", 0).remove();
+
+    const enteringRoutes = routes.enter().append("path")
+      .attr("fill", "none")
+      .attr("stroke", "#E8A33D")
+      .attr("stroke-opacity", 0.55)
+      .attr("stroke-linecap", "round")
+      .style("opacity", 0);
+
+    enteringRoutes.merge(routes)
+      .attr("stroke-width", d => 0.5 * Math.sqrt(routeCount[routeKey(d.from, d.to)] || 1))
+      .attr("d", buildArcPath);
+
+    enteringRoutes.each(function () {
+      const length = this.getTotalLength();
+      const sel = d3.select(this).style("opacity", 1);
+      if (routeAnimationMs === 0) {
+        sel.attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+      } else {
+        sel.attr("stroke-dasharray", `${length} ${length}`)
+          .attr("stroke-dashoffset", length)
+          .transition()
+          .duration(routeAnimationMs)
+          .ease(d3.easeCubicOut)
+          .attr("stroke-dashoffset", 0);
+      }
+    });
+
+    routes.style("opacity", 1).attr("stroke-dasharray", null).attr("stroke-dashoffset", null);
+
+    mileageEl.html(
+      `Flights by ${formatTimelineDate(selectedDate)}: ${visibleFlights.length}<br/>` +
+      `Total miles: ${Math.round(totalMiles).toLocaleString()} mi `
+    );
+
+    const airports = [...new Set(visibleFlights.flatMap(f => [f.from, f.to]))];
+    const latestFlight = visibleFlights[visibleFlights.length - 1];
+    const latestAirportCode = latestFlight ? latestFlight.to : null;
+
+    const labels = airports
+      .filter(code => coordLookup[code])
+      .map(code => ({
+        code,
+        isLatest: code === latestAirportCode,
+        hasNote: !!(AIRPORT_NOTES[code] && AIRPORT_NOTES[code].trim()),
+        x: projection(coordLookup[code])[0],
+        y: projection(coordLookup[code])[1]
+      }));
+
+    for (let i = 0; i < labels.length; i++) {
+      for (let j = i + 1; j < labels.length; j++) {
+        const a = labels[i], b = labels[j];
+        const dx = b.x - a.x, dy = b.y - a.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 15) {
+          const angle = Math.atan2(dy, dx);
+          const shift = 7;
+          a.x -= shift * Math.cos(angle);
+          a.y -= shift * Math.sin(angle);
+          b.x += shift * Math.cos(angle);
+          b.y += shift * Math.sin(angle);
+        }
+      }
+    }
+
+    const dotColor = d => d.hasNote ? "#E8A33D" : (d.isLatest ? "#F3EFE6" : "#7C7566");
+    const dotRadius = d => d.isLatest ? 4 : (d.hasNote ? 3.4 : 2.4);
+    const labelColor = d => d.isLatest ? "#E8A33D" : (d.hasNote ? "#F3EFE6" : "#8FA0B4");
+    const labelWeight = d => d.isLatest ? 700 : 400;
+
+    markerLayer.selectAll("circle")
+      .data(labels, d => d.code)
+      .join(
+        enter => enter.append("circle")
+          .attr("class", "airport-dot")
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y)
+          .attr("r", 0)
+          .attr("fill", dotColor)
+          .attr("stroke", "#0E1B2A")
+          .attr("stroke-width", 1)
+          .call(sel => reduceMotion ? sel.attr("r", dotRadius) : sel.transition().duration(labelAnimationMs).attr("r", dotRadius)),
+        update => update
+          .call(sel => reduceMotion ? sel.attr("cx", d => d.x).attr("cy", d => d.y).attr("r", dotRadius).attr("fill", dotColor)
+            : sel.transition().duration(labelAnimationMs)
+              .attr("cx", d => d.x).attr("cy", d => d.y)
+              .attr("r", dotRadius).attr("fill", dotColor)),
+        exit => exit.transition().duration(labelAnimationMs).attr("r", 0).remove()
+      );
+
+    labelLayer.selectAll("text")
+      .data(labels, d => d.code)
+      .join(
+        enter => enter.append("text")
+          .attr("class", d => d.hasNote ? "airport-label has-note" : "airport-label")
+          .attr("x", d => d.x)
+          .attr("y", d => d.y)
+          .attr("dy", "-0.6em")
+          .attr("text-anchor", "middle")
+          .attr("font-size", 10)
+          .attr("font-weight", labelWeight)
+          .attr("fill", labelColor)
+          .style("opacity", 0)
+          .text(d => d.code)
+          .call(sel => reduceMotion ? sel.style("opacity", 1) : sel.transition().duration(labelAnimationMs).style("opacity", 1)),
+        update => update
+          .attr("class", d => d.hasNote ? "airport-label has-note" : "airport-label")
+          .call(sel => reduceMotion
+            ? sel.attr("x", d => d.x).attr("y", d => d.y).attr("font-weight", labelWeight).attr("fill", labelColor).style("opacity", 1)
+            : sel.transition().duration(labelAnimationMs)
+              .attr("x", d => d.x).attr("y", d => d.y)
+              .attr("font-weight", labelWeight).attr("fill", labelColor).style("opacity", 1)),
+        exit => exit.transition().duration(labelAnimationMs - 50 > 0 ? labelAnimationMs - 50 : 0).style("opacity", 0).remove()
+      )
+      .select(function (d) {
+        // native tooltip preview of the note on hover
+        let title = this.querySelector("title");
+        if (!title) {
+          title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+          this.appendChild(title);
+        }
+        title.textContent = AIRPORT_NOTES[d.code] ? `${d.code}: ${AIRPORT_NOTES[d.code]}` : d.code;
+        return null;
+      });
+
+    updateSelectedDateBubble(selectedDate);
+  }
+
+  function renderMap() {
+    const width = container.node().clientWidth;
+    if (!width) return;
+
+    const aspectRatio = width < 480 ? 1.35 : 1.7;
+    const height = width / aspectRatio;
+
+    container.selectAll("svg").remove();
+
+    svg = container.append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+      .style("width", "100%")
+      .style("height", "auto");
+
+    projection = d3.geoNaturalEarth1()
+      .scale(width / 1.5 / Math.PI)
+      .translate([width / 2, height / 2])
+      .rotate([120, 0]);
+
+    path = d3.geoPath().projection(projection);
+
+    const countries = topojson.feature(cachedWorld, cachedWorld.objects.countries);
+    countries.features = countries.features.filter(d => d.id !== "010");
+
+    svg.append("g")
+      .selectAll("path")
+      .data(countries.features)
+      .join("path")
+      .attr("fill", "#7C7566")
+      .attr("stroke", "#0E1B2A")
+      .attr("stroke-width", 0.75)
+      .attr("d", path);
+
+    routeLayer = svg.append("g");
+    markerLayer = svg.append("g");
+    labelLayer = svg.append("g");
+
+    updateRouteVisibility(currentSelectedDate);
+  }
+
+  d3.csv(csvURL).then(data => {
+    for (const row of data) {
+      const code = row.code;
+      const lat = parseFloat(row.latitude);
+      const lon = parseFloat(row.longitude);
+      if (code && !isNaN(lat) && !isNaN(lon)) coordLookup[code] = [lon, lat];
+    }
+
+    slider.attr("min", 0).attr("max", sliderMax).attr("step", 1).property("value", sliderMax);
+    timelineStartLabel.text(formatTimelineDate(timelineStart));
+    timelineEnd.text(formatTimelineDate(timelineEndDate));
+    updateSelectedDateBubble(timelineEndDate);
+
+    slider.on("input", function () {
+      updateRouteVisibility(sliderValueToDate(this.value));
+    });
+
+    return d3.json(worldURL);
+  }).then(world => {
+    if (!world) return;
+    cachedWorld = world;
+    renderMap();
+
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(() => renderMap());
+      ro.observe(container.node());
+    } else {
+      window.addEventListener("resize", renderMap);
+    }
+  }).catch(err => {
+    mileageEl.text("Couldn't load flight data");
+    console.error("Travel log failed to load:", err);
+  });
+})();
+</script>
+</body>
+</html>
