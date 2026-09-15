@@ -31,6 +31,39 @@
     .news-item { margin-bottom: 0.5rem; }
     .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
     .section-card h3 { margin-bottom: 10px; }
+        .project-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: transform .2s ease, box-shadow .2s ease;
+        height: 100%;
+    }   
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+
+    .project-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .project-card .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card p {
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+
+    .project-card a.btn {
+        align-self: flex-start;
+    }
 </style>
 </head>
 <body>
@@ -71,11 +104,14 @@
             <h1 class="text-primary mb-1">Reese Fairchild</h1>
             <h5 class="mb-3">University of Washington Computer Science and Mathematics<br>Undergraduate Researcher</h5>
             <h4>About Me</h4>
-            <p>Hello there! I am an undergraduate student at the University of Washington, where I study CS and Math. I currently 
-                do research work with the UW Interactive Data Lab in the realm of Human-AI Interaction, focusing on how generative AI
-                is used in the research process. I am a TA for CSE 121 (Intro to Java Programming)
-                and the Co-Chair of Q++, one of the Allen School affinity groups. In terms of personal interests, I love collecting CDs, crossword puzzles, and traveling (when I can), among other things.
-                <br><br>
+            <p>Hello there! I am an a senior undergraduate student at the University of Washington, where I study Computer Science and Math. I currently 
+                work with the <a href="https://idl.uw.edu/" target="_blank">UW Interactive Data Lab</a> in the realm of Human-AI Interaction, focusing on how generative AI
+                is used in the research process. In have had the honor of working with <a href="https://homes.cs.washington.edu/~leibatt/bio.html">Dr. Leilani Battle</a> at the
+                University of Washington, <a href="https://iis-lab.org/member/koji-yatani/">Dr. Koji Yatani</a> during my summer at the University of Tokyo, and
+                <a href="https://chemeng.thu.edu.tw/web/teacher/detail_teacher.php?id=40">Dr. Ta-Chen Lin</a> during my time at Tunghai University, among others.<br>
+                <br>
+                Beyond research, I am a lead TA for CSE 121 (Intro to Java Programming) and the Co-Chair of Q++, one of the Allen School affinity groups.
+                In terms of personal interests, I love collecting CDs, crossword puzzles, and traveling (when I can), among other things.
                 This site is mostly an interactive CV, so feel free to poke around. If you have any questions, want to chat, or have a research opportunity, please don't hesitate to reach out (contact info at the bottom of the page).
             </p>
 
