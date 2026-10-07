@@ -29,41 +29,16 @@
     .top-section img.headshot { max-width: 200px; border-radius: 50%; margin-bottom: 1rem; }
     .logo-row img { height: 50px; margin-right: 15px; }
     .news-item { margin-bottom: 0.5rem; }
+    .news-window {
+        max-height: 500px;
+        overflow-y: auto;
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.5rem;
+        background-color: #fff;
+    }
     .section-card { background-color: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 15px; }
     .section-card h3 { margin-bottom: 10px; }
-        .project-card {
-        border: none;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: transform .2s ease, box-shadow .2s ease;
-        height: 100%;
-    }   
-
-    .project-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
-    }
-
-    .project-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-    }
-
-    .project-card .card-body {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .project-card p {
-        flex-grow: 1;
-        margin-bottom: 1rem;
-    }
-
-    .project-card a.btn {
-        align-self: flex-start;
-    }
 </style>
 </head>
 <body>
@@ -96,6 +71,13 @@
                 <img src="pics/q++logo.png" alt="Q++ Logo">
                 <img src="pics/firstgenUW.png" alt="Gen1 Logo">
             </div>
+            <section class="mt-4" aria-labelledby="news-heading">
+                <h4 id="news-heading">News</h4>
+                <div class="news-window" tabindex="0" role="region" aria-label="Recent news">
+                    <ul class="list-unstyled mb-0" id="news-list">
+                    </ul>
+                </div>
+            </section>
         </div>
 
         <!-- Name, Titles, News -->
@@ -115,47 +97,8 @@
                 This site is mostly an interactive CV, so feel free to poke around. If you have any questions, want to chat, or have a research opportunity, please don't hesitate to reach out (contact info at the bottom of the page).
             </p>
 
-            <!-- Highlighted Projects Row -->
-            <div class="section-card">
-                <h5>Highlighted + Current Research</h5>
-                <i>Learn more in the "Research" tab!</i>
+            <div data-featured-research></div>
 
-                <div class="row g-4 mt-2">
-
-                    <!-- Compass -->
-                    <div class="col-lg-6">
-                        <div class="card project-card">
-
-                            <img src="pics/compass.png"
-                                alt="Compass Screenshot">
-
-                            <div class="card-body">
-
-                                <h4 class="card-title">
-                                    Automated Research Onboarding Aid
-                                </h4>
-
-                                <p class="card-text">
-                                    Utilizing AI to help new researchers identify and explore their the gaps in their knowledge and situate themselves into their research team.
-                                </p>
-
-                                <a class="btn btn-dark"
-                                href="https://reesefairchild.github.io/posters/COMPASS-5-26.pdf"
-                                target="_blank">
-                                    Poster
-                                </a>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <!-- News Section -->
-            <h4>News</h4>
-            <ul class="list-unstyled" id="news-list">
-            </ul>
         </div>
     </div>
 </div>
@@ -166,14 +109,14 @@
     <p>Email: <a href="mailto:rfair@uw.edu">rfair@uw.edu</a> or <a href="mailto:rfair@cs.washington.edu">rfair@cs.washington.edu</a></p>
     <p>GitHub: <a href="https://github.com/reesefairchild" target="_blank">reesefairchild</a></p>
     <p>Curriculum Vitae: <a href="https://docs.google.com/document/d/18nTRyef6-9bR57_jJLUucTdfO4t9_UNM/edit?usp=sharing&ouid=110452623166169156063&rtpof=true&sd=true" 
-        target="_blank">CV</a> <i>(Last Updated: 8/30/26)</i></p>
+        target="_blank">CV</a> <i>(Last Updated: 10/6/26)</i></p>
     <p>Google Scholar: <i>Coming Soon...</i></p>
 </div>
 
 <!-- Footer -->
 <footer class="bg-dark text-white py-3 mt-5">
     <div class="container text-center">
-        Made by <a href="https://reesefairchild.github.io" class="text-white">Reese Fairchild</a> | Powered by <a href="https://getbootstrap.com" class="text-white">Bootstrap</a>
+        Made by <a href="https://reesefairchild.github.io" class="text-white">Reese Fairchild</a>
     </div>
 </footer>
 
@@ -183,11 +126,34 @@ fetch("news/news.txt")
     .then(response => response.text())
     .then(text => {
         const lines = text.split(/\r?\n/).filter(line => line.trim() !== "");
-        const lastFive = lines.slice(-5);
-        const reversed = lastFive.reverse().join("\n");
-        document.getElementById("news-list").innerHTML = reversed +
-            '<li><a href="news/news_page.html"><i>News Archive</i></a></li>';
+        //const lastFive = lines.slice(-7);
+        //const reversed = lastFive.reverse().join("\n");
+        const reversed = lines.reverse().join("\n");
+        document.getElementById("news-list").innerHTML = reversed;
+        //    '<li><a href="news/news_page.html"><i>News Archive</i></a></li>';
     });
+</script>
+<script>
+fetch("pages/featured-research.html")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Failed to load featured research: ${response.status}`);
+        }
+        return response.text();
+    })
+    .then(markup => {
+        document.querySelectorAll("[data-featured-research]").forEach(container => {
+            container.innerHTML = markup;
+            const componentScript = container.querySelector("[data-featured-research-script]");
+            if (!componentScript) return;
+
+            const executableScript = document.createElement("script");
+            executableScript.textContent = componentScript.textContent;
+            componentScript.remove();
+            document.body.append(executableScript);
+        });
+    })
+    .catch(error => console.error(error));
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

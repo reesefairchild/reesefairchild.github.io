@@ -78,6 +78,209 @@
         vertical-align: top;
         line-height: 1.5;
     }
+
+    .publication-controls {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 0.75rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .publication-filter {
+        min-width: 0;
+    }
+
+    .publication-filter .form-label {
+        margin-bottom: 0.25rem;
+        font-size: 0.85rem;
+    }
+
+    .publication-year-block {
+        margin-bottom: 1.5rem;
+    }
+
+    .publication-item {
+        position: relative;
+        padding: 0.55rem 0.75rem;
+        border: 0;
+        border-radius: 0.5rem;
+        transition: background-color 100ms ease;
+    }
+
+    .publication-item:hover,
+    .publication-item:focus-within,
+    .publication-item.is-open {
+        z-index: 2;
+        background-color: #f8f4ff;
+    }
+
+    .publication-item + .publication-item {
+        margin-top: 0.35rem;
+    }
+
+    .publication-year-cell {
+        width: 150px;
+        font-weight: 500;
+    }
+
+    .publication-list-cell {
+        padding: 0.5rem 0 0.5rem 20px;
+    }
+
+    .publication-year-publications {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+
+    .publication-title {
+        margin: 0 0 0.25rem;
+        font-size: 1.05rem;
+        font-weight: 700;
+    }
+
+    .publication-authors,
+    .publication-venue,
+    .publication-links {
+        margin: 0.1rem 0;
+        line-height: 1.45;
+    }
+
+    .publication-details-toggle {
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: #66508b;
+        font-size: 0.85rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .publication-details-toggle:hover {
+        color: #40256b;
+        text-decoration: underline;
+    }
+
+    .publication-details-toggle:focus-visible {
+        outline: 2px solid #6f42c1;
+        outline-offset: 2px;
+    }
+
+    .publication-extra {
+        position: absolute;
+        top: calc(100% - 0.25rem);
+        left: 0;
+        right: 0;
+        z-index: 3;
+        padding: 0.85rem 1rem;
+        border: 1px solid #e2d9f0;
+        border-radius: 0.5rem;
+        background-color: #fff;
+        box-shadow: 0 8px 22px rgba(31, 20, 49, 0.18);
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-0.25rem);
+        transition: opacity 120ms ease, transform 120ms ease, visibility 0s linear 120ms;
+    }
+
+    .publication-item:hover .publication-extra,
+    .publication-item:focus-within .publication-extra,
+    .publication-item.is-open .publication-extra {
+        pointer-events: auto;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition-delay: 0s;
+    }
+
+    .publication-description {
+        margin: 0 0 0.5rem;
+        line-height: 1.5;
+    }
+
+    .publication-extra strong {
+        color: #4b3c60;
+    }
+
+    @media (max-width: 767.98px) {
+        .publication-controls {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .publication-controls {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .publication-year-cell {
+            width: 75px;
+        }
+
+        .publication-list-cell {
+            padding-left: 0.75rem;
+        }
+
+        .publication-extra {
+            left: -0.25rem;
+            right: -0.25rem;
+        }
+    }
+
+    details.section-card > summary {
+        cursor: pointer;
+        list-style: none;
+    }
+
+    details.section-card > summary::-webkit-details-marker {
+        display: none;
+    }
+
+    details.section-card > summary h3::after {
+        content: "+";
+        float: right;
+        font-style: normal;
+        font-size: 1.25rem;
+    }
+
+    details.section-card[open] > summary h3::after {
+        content: "−";
+    }
+
+    .project-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        height: 100%;
+    }
+
+    .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .project-card img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    .project-card .card-body {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .project-card p {
+        flex-grow: 1;
+        margin-bottom: 1rem;
+    }
+
+    .project-card a.btn {
+        align-self: flex-start;
+    }
 </style>
 </head>
 <body>
@@ -103,28 +306,41 @@
 <!-- Main Content -->
 <div class="container my-5">
 
+    <div class="section-card">
+        <h5>Highlighted + Current Research</h5>
+        <div class="row g-4 mt-2">
+            <div class="col-lg-6">
+                <div class="card project-card">
+                    <img src="pics/compass.png" alt="Compass Screenshot">
+                    <div class="card-body">
+                        <h4 class="card-title">Automated Research Onboarding Aid</h4>
+                        <p class="card-text">Utilizing AI to help new researchers identify and explore the gaps in their knowledge and situate themselves into their research team.</p>
+                        <a class="btn btn-dark" href="posters/COMPASS-5-26.pdf" target="_blank" rel="noopener">Poster</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card project-card">
+                    <img src="pics/citationproj.png" alt="Citation Project Screenshot">
+                    <div class="card-body">
+                        <h4 class="card-title">Analyzing Peer Review of Citations</h4>
+                        <p class="card-text">Analyzing how researchers conduct peer review of inline citations: what citations they prioritize, what challenges they face, and how they desire to use GenAI in the process?</p>
+                        <a class="btn btn-dark" href="https://arxiv.org/abs/2610.05355" target="_blank" rel="noopener">Paper</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Publications -->
     <div class="section-card">
         <h3><i>Publications</i></h3>
-        <table class="info-table">
-            <tr>
-                <td class="info-left">
-                    Under Review
-                </td>
-                <td class="info-right">
-                    <b>COMPASS: Conversational Onboarding Mechanism for Project Alignment and Setup Support</b><br>
-                    Anthony Wise, <b>Reese Fairchild</b>, Shruti Badrish, Yashika Kachana, Ella Cao, Leilani Battle, and Anind Dey
-                    <br><br>
-                    <b>Rethinking Inline Citation Verification in Scholarly Communication</b><br>
-                    Xinrui Fang, <b>Reese Fairchild</b>, Nasi Wang, Anran Xu, Simo Hosio, Sylvain Malacria, and Koji Yatani
-                </td>
-            </tr>
-        </table>
+        <div data-publication-browser></div>
     </div>
 
     <!-- Research Experience -->
-    <div class="section-card">
-        <h3><i>Research Experience</i></h3>
+    <details class="section-card">
+        <summary><h3><i>Research Experience</i></h3></summary>
         <table class="info-table">
             <tr>
                 <td class="info-left">
@@ -174,11 +390,11 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </details>
 
     <!-- Presentations -->
-    <div class="section-card">
-        <h3><i>Presentations</i></h3>
+    <details class="section-card">
+        <summary><h3><i>Presentations</i></h3></summary>
     <table class="info-table">
             <tr>
                 <td class="info-left">
@@ -193,43 +409,21 @@
                 </td>
             </tr>
         </table>
-    </div>
+    </details>
 
-    <!-- Unpublished Work -->
-    <div class="section-card" id="unpublished">
-        <h3><i>Unpublished Work</i></h3>
-        <p><i>These works are not referred or published, and are not intended to be published. 
-            They are provided for informational purposes.</i></p>
-        <table class="info-table">
-            <tr>
-                <td class="info-left">
-                    2025
-                </td>
-                <td class="info-right">
-                    <b>
-                        Biochemical Process Optimization with Simulated Annealing
-                        and Artificial Neural Networks
-                    </b><br>
-                    <b>Reese Fairchild</b>, under the supervision of Ta-Chen Lin
-                    (Tunghai University)<br>
-                    Final Report for the NSTC IIPP Research Internship in Taiwan <i>(Submitted to National Science and Technology Council of Taiwan)</i><br>
-                    <a href="misc_docs/IIPP Final Report - September 2025.pdf" class="paper-link">PDF</a>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <p>*Denotes Equal Contribution<br><i>Contact me for more information about my research. See PDFs for more details on authors/presenters.</i></p>
+    <p><i>Contact me for more information about my research. See PDFs for more details on authors/presenters.</i></p>
 
 </div>
 
 <!-- Footer -->
 <footer class="bg-dark text-white py-3 mt-5">
-    <div class="container text-center"> 
-        Made by <a href="https://reesefairchild.github.io" class="text-white">Reese Fairchild</a> | Powered by <a href="https://getbootstrap.com" class="text-white">Bootstrap</a>
+    <div class="container text-center">
+        Made by <a href="https://reesefairchild.github.io" class="text-white">Reese Fairchild</a>
     </div>
 </footer>
 
+<script src="research-publications-data.js"></script>
+<script src="research.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
