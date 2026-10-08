@@ -73,6 +73,9 @@ if (publicationRoot) {
         if (Number.isFinite(yearDifference) && yearDifference !== 0) return yearDifference;
         if (!a.year && b.year) return 1;
         if (a.year && !b.year) return -1;
+        if (a.date && !b.date) return -1;
+        if (!a.date && b.date) return 1;
+        if (a.date !== b.date) return b.date.localeCompare(a.date);
         return a.title.localeCompare(b.title);
     });
 
@@ -116,7 +119,7 @@ if (publicationRoot) {
         }
 
         [
-            ["link", "Project"],
+            ["link", "Link"],
             ["pdf", "PDF"],
             ["code", "Code"],
             ["html", "HTML"]
@@ -192,16 +195,35 @@ if (publicationRoot) {
 
     publicationRoot.append(controls, list, emptyMessage);
 
-    const addOptions = (select, values) => {
-        [...new Set(values.filter(Boolean))]
-            .sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }))
-            .forEach(value => addOption(select, value));
+    const getLabelCounts = valuesByPublication => {
+        const counts = new Map();
+        valuesByPublication.forEach(values => {
+            [...new Set(values.filter(Boolean))].forEach(value => {
+                counts.set(value, (counts.get(value) || 0) + 1);
+            });
+        });
+        return counts;
+    };
+    const addCountedOptions = (select, counts, comparator) => {
+        [...counts.keys()]
+            .sort(comparator)
+            .forEach(value => addOption(select, value, `${value} (${counts.get(value)})`));
     };
 
-    addOptions(venueSelect, publications.flatMap(publication => publication.venue_tags));
-    addOptions(yearSelect, publications.map(publication => String(publication.year || "")));
-    addOptions(typeSelect, publications.flatMap(publication => publication.type));
-    addOptions(tagSelect, publications.flatMap(publication => publication.tags));
+    const compareLabels = (a, b) => a.localeCompare(b, undefined, { sensitivity: "base" });
+    const compareByCount = (counts, a, b) => counts.get(b) - counts.get(a) || compareLabels(a, b);
+    const yearCounts = getLabelCounts(publications.map(publication => [String(publication.year || "")]));
+    addCountedOptions(
+        yearSelect,
+        yearCounts,
+        (a, b) => Number(b) - Number(a) || compareLabels(a, b)
+    );
+    const venueCounts = getLabelCounts(publications.map(publication => publication.venue_tags));
+    const typeCounts = getLabelCounts(publications.map(publication => publication.type));
+    const tagCounts = getLabelCounts(publications.map(publication => publication.tags));
+    addCountedOptions(venueSelect, venueCounts, (a, b) => compareByCount(venueCounts, a, b));
+    addCountedOptions(typeSelect, typeCounts, (a, b) => compareByCount(typeCounts, a, b));
+    addCountedOptions(tagSelect, tagCounts, (a, b) => compareByCount(tagCounts, a, b));
 
     const cards = Array.from(list.querySelectorAll(".publication-item"));
     const applyFilters = () => {

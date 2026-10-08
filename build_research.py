@@ -1,5 +1,6 @@
 import json
 import re
+from datetime import date
 from pathlib import Path
 
 import yaml
@@ -10,7 +11,7 @@ PAPER_INFO = ROOT / "paper-info"
 OUTPUT = ROOT / "research-publications-data.js"
 FRONT_MATTER = re.compile(r"\A---\s*\r?\n(.*?)\r?\n---(?:\s*\r?\n|\Z)", re.DOTALL)
 LIST_FIELDS = ("authors", "tags", "type", "venue_tags")
-TEXT_FIELDS = ("title", "description", "link", "pdf", "code", "html", "summary", "venue", "venue_url")
+TEXT_FIELDS = ("title", "description", "link", "pdf", "code", "html", "summary", "venue", "venue_url", "date")
 TEMPLATE_FILES = {"template-paper.md"}
 
 
@@ -55,6 +56,14 @@ def read_publication(path):
 
     if not publication["title"]:
         raise ValueError(f"{path.name}: 'title' is required")
+    publication_date = publication["date"]
+    if not re.fullmatch(r"(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])", publication_date):
+        raise ValueError(f"{path.name}: 'date' must use MM-DD format")
+    try:
+        month, day = map(int, publication_date.split("-"))
+        date(2000, month, day)
+    except ValueError as error:
+        raise ValueError(f"{path.name}: 'date' must be a valid MM-DD date") from error
     return publication
 
 

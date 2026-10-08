@@ -19,4 +19,5 @@ venue: ACM Conference on Human Factors in Computing Systems
 venue_tags:
   - CHI
 year: 2027
+date: 12-31
 ---
