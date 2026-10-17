@@ -11,7 +11,7 @@ PAPER_INFO = ROOT / "paper-info"
 OUTPUT = ROOT / "research-publications-data.js"
 FRONT_MATTER = re.compile(r"\A---\s*\r?\n(.*?)\r?\n---(?:\s*\r?\n|\Z)", re.DOTALL)
 LIST_FIELDS = ("authors", "tags", "type", "venue_tags")
-TEXT_FIELDS = ("title", "description", "link", "pdf", "code", "html", "summary", "venue", "venue_url", "date")
+TEXT_FIELDS = ("title", "description", "link", "pdf", "code", "html", "summary", "venue", "venue_url", "date", "doi", "award")
 TEMPLATE_FILES = {"template-paper.md"}
 
 

@@ -14,7 +14,7 @@
 <body>
     <main class="container my-5">
         <article class="publication-card p-4">
-            <p class="text-muted">{{ page.year }}{% if page.venue %} · {{ page.venue | escape }}{% endif %}</p>
+            <p class="text-muted">{{ page.year }}{% if page.venue %} · {{ page.venue | escape }}{% endif %}{% if page.award %}<br><strong>★ {{ page.award | escape }}</strong>{% endif %}</p>
             <h1 class="h2">{{ page.title | escape }}</h1>
             {% if page.authors %}
             <p>
@@ -26,6 +26,7 @@
             <p>
                 {% if page.link %}<a href="{{ page.link | escape }}" rel="noopener">Project page</a>{% endif %}
                 {% if page.pdf %}{% if page.link %} · {% endif %}<a href="{{ page.pdf | escape }}" rel="noopener">PDF</a>{% endif %}
+                {% if page.doi %}{% if page.link or page.pdf %} · {% endif %}<a href="{% if page.doi contains '://' %}{{ page.doi | escape }}{% else %}https://doi.org/{{ page.doi | escape }}{% endif %}" rel="noopener">DOI</a>{% endif %}
             </p>
             {{ content }}
             <p class="mt-4"><a href="{{ '/research.html' | relative_url }}">Back to research</a></p>

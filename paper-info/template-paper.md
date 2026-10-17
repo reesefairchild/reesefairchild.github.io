@@ -6,6 +6,8 @@ authors:
 description: A template for new papers.
 link: reesefairchild.github.io
 pdf: reesefairchild.github.io
+doi: 10.1234/example
+award: Example Best Paper Award
 tags:
   - Visualization
   - Artificial Intelligence

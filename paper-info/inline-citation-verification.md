@@ -22,6 +22,7 @@ venue_tags:
   - arXiv
 type:
   - Preprint
+doi: https://doi.org/10.48550/arXiv.2509.19680
 year: 2026
 date: 10-06
 ---

@@ -89,7 +89,8 @@ if (publicationRoot) {
         const hoverDetails = createElement("div", "publication-extra");
         const description = publication.description || publication.summary;
         const sortedTags = [...publication.tags].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
-        const hasDetails = Boolean(description || sortedTags.length);
+        const sortedVenueTags = [...publication.venue_tags].sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" }));
+        const hasDetails = Boolean(description || sortedTags.length || publication.type.length || sortedVenueTags.length);
 
         article.dataset.title = publication.title.toLocaleLowerCase();
         article.dataset.authors = publication.authors.join("|").toLocaleLowerCase();
@@ -117,6 +118,12 @@ if (publicationRoot) {
         } else {
             metaLine.append(document.createTextNode("Under Review"));
         }
+        if (publication.award) {
+            metaLine.append(
+                document.createElement("br"),
+                createElement("strong", "publication-award", `★ ${publication.award}`)
+            );
+        }
 
         [
             ["link", "Link"],
@@ -128,11 +135,23 @@ if (publicationRoot) {
             if (links.childNodes.length) links.append(document.createTextNode(" | "));
             links.append(createLink(publication[field], label));
         });
+        if (publication.doi) {
+            if (links.childNodes.length) links.append(document.createTextNode(" | "));
+            const doi = publication.doi.trim();
+            const doiUrl = /^https?:\/\//i.test(doi) ? doi : `https://doi.org/${doi}`;
+            links.append(createLink(doiUrl, "DOI"));
+        }
 
         if (description) hoverDetails.append(createElement("p", "publication-description", description));
+        const appendDetailList = (label, values) => {
+            if (!values.length) return;
+            if (hoverDetails.childNodes.length) hoverDetails.append(document.createElement("br"));
+            hoverDetails.append(createElement("strong", "", `${label}: `), document.createTextNode(values.join(", ")));
+        };
+        appendDetailList("Type", publication.type);
+        appendDetailList("Venue tags", sortedVenueTags);
         if (sortedTags.length) {
-            const tagsLabel = createElement("strong", "", "Tags: ");
-            hoverDetails.append(tagsLabel, document.createTextNode(sortedTags.join(", ")));
+            appendDetailList("Tags", sortedTags);
         }
 
         article.append(title);

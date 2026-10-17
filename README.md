@@ -44,8 +44,12 @@ link: https://example.com/project
 pdf: https://example.com/paper.pdf
 code: https://github.com/example/project
 html: https://example.com/demo
+doi: 10.1234/example
+award: Example Best Paper Award
 tags:
   - Visualization
 summary: A brief summary of the paper.
 ---
 ```
+
+`doi` accepts a DOI identifier or a full DOI URL and is displayed after the other publication links. `award` is displayed in bold on a new line after the venue with a star.
