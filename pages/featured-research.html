@@ -37,9 +37,8 @@
 <template data-featured-research-content>
 <div class="section-card">
     <h5>Highlighted + Current Research</h5>
-
     <div class="row g-4 mt-2">
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card project-card">
                 <img src="pics/compass.png" alt="Compass Screenshot">
                 <div class="card-body">
@@ -57,7 +56,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
             <div class="card project-card">
                 <img src="pics/citationproj.png" alt="Citation Project Screenshot">
                 <div class="card-body">
@@ -74,17 +73,17 @@
                     </a>
                 </div>
             </div>
-            </template>
-
-            <script data-featured-research-script>
-            document.querySelectorAll("[data-featured-research]").forEach(container => {
-                const content = container.querySelector("[data-featured-research-content]");
-                if (!content) return;
-
-                container.append(content.content.cloneNode(true));
-                content.remove();
-            });
-            </script>
         </div>
     </div>
 </div>
+</template>
+
+<script data-featured-research-script>
+document.querySelectorAll("[data-featured-research]").forEach(container => {
+    const content = container.querySelector("[data-featured-research-content]");
+    if (!content) return;
+
+    container.append(content.content.cloneNode(true));
+    content.remove();
+});
+</script>
