@@ -54,6 +54,11 @@ def read_publication(path):
     for field in LIST_FIELDS:
         publication[field] = normalize_list(metadata.get(field), field, path.name)
 
+    is_preprint = metadata.get("is_preprint", "Preprint" in publication["type"])
+    if not isinstance(is_preprint, bool):
+        raise ValueError(f"{path.name}: 'is_preprint' must be a boolean")
+    publication["is_preprint"] = is_preprint
+
     if not publication["title"]:
         raise ValueError(f"{path.name}: 'title' is required")
     publication_date = publication["date"]

@@ -28,11 +28,14 @@ if (publicationRoot) {
     const yearSelect = createElement("select", "form-select");
     const typeSelect = createElement("select", "form-select");
     const tagSelect = createElement("select", "form-select");
+    const preprintCheckbox = createElement("input", "form-check-input");
     const list = document.createElement("div");
+    const publicationCount = createElement("p", "publication-count");
     const emptyMessage = createElement("p", "", "No publications match these filters.");
     const groups = new Map();
 
     list.dataset.publicationList = "";
+    publicationCount.setAttribute("aria-live", "polite");
     emptyMessage.hidden = true;
 
     const addControl = (label, id, control) => {
@@ -40,7 +43,16 @@ if (publicationRoot) {
         const labelElement = createElement("label", "form-label", label);
         labelElement.htmlFor = id;
         control.id = id;
-        wrapper.append(labelElement, control);
+        if (control.tagName === "SELECT") {
+            const selectWrapper = createElement("div", "publication-filter-select-wrap");
+            const selectedLabel = createElement("span", "publication-filter-selected-label");
+            selectedLabel.setAttribute("aria-hidden", "true");
+            control.classList.add("publication-filter-counted-select");
+            selectWrapper.append(control, selectedLabel);
+            wrapper.append(labelElement, selectWrapper);
+        } else {
+            wrapper.append(labelElement, control);
+        }
         controls.append(wrapper);
     };
 
@@ -51,10 +63,14 @@ if (publicationRoot) {
     yearSelect.dataset.publicationYearFilter = "";
     typeSelect.dataset.publicationTypeFilter = "";
     tagSelect.dataset.publicationTagFilter = "";
+    preprintCheckbox.type = "checkbox";
+    preprintCheckbox.checked = true;
+    preprintCheckbox.dataset.publicationPreprintFilter = "";
 
     const addOption = (select, value, label = value) => {
         const option = createElement("option", "", label);
         option.value = value;
+        option.dataset.label = label;
         select.append(option);
     };
 
@@ -63,6 +79,13 @@ if (publicationRoot) {
     addControl("Year", "publication-year-filter", yearSelect);
     addControl("Type", "publication-type-filter", typeSelect);
     addControl("Tag", "publication-tag-filter", tagSelect);
+    const preprintWrapper = createElement("div", "publication-filter");
+    const preprintLabel = createElement("label", "form-label", "Show Preprints");
+    preprintLabel.htmlFor = "publication-preprint-filter";
+    preprintCheckbox.id = "publication-preprint-filter";
+    preprintCheckbox.classList.add("publication-preprint-checkbox");
+    preprintWrapper.append(preprintLabel, preprintCheckbox);
+    controls.append(preprintWrapper);
     addOption(venueSelect, "", "All venues");
     addOption(yearSelect, "", "All years");
     addOption(typeSelect, "", "All types");
@@ -98,6 +121,7 @@ if (publicationRoot) {
         article.dataset.year = String(publication.year || "");
         article.dataset.type = publication.type.join("|").toLocaleLowerCase();
         article.dataset.tags = sortedTags.join("|").toLocaleLowerCase();
+        article.dataset.isPreprint = String(publication.is_preprint === true);
 
         publication.authors.forEach((author, index) => {
             if (author === "Reese Fairchild") {
@@ -212,7 +236,7 @@ if (publicationRoot) {
         groups.get(year).querySelector(".publication-year-publications").append(article);
     });
 
-    publicationRoot.append(controls, list, emptyMessage);
+    publicationRoot.append(publicationCount, controls, list, emptyMessage);
 
     const getLabelCounts = valuesByPublication => {
         const counts = new Map();
@@ -226,7 +250,7 @@ if (publicationRoot) {
     const addCountedOptions = (select, counts, comparator) => {
         [...counts.keys()]
             .sort(comparator)
-            .forEach(value => addOption(select, value, `${value} (${counts.get(value)})`));
+            .forEach(value => addOption(select, value));
     };
 
     const compareLabels = (a, b) => a.localeCompare(b, undefined, { sensitivity: "base" });
@@ -245,21 +269,46 @@ if (publicationRoot) {
     addCountedOptions(tagSelect, tagCounts, (a, b) => compareByCount(tagCounts, a, b));
 
     const cards = Array.from(list.querySelectorAll(".publication-item"));
-    const applyFilters = () => {
+    const countedFilters = [
+        { select: venueSelect, getValues: card => card.dataset.venue.split("|").filter(Boolean) },
+        { select: yearSelect, getValues: card => card.dataset.year ? [card.dataset.year] : [] },
+        { select: typeSelect, getValues: card => card.dataset.type.split("|").filter(Boolean) },
+        { select: tagSelect, getValues: card => card.dataset.tags.split("|").filter(Boolean) }
+    ];
+    const matchesFilters = (card, excludedSelect) => {
         const authorQuery = authorInput.value.trim().toLocaleLowerCase();
+        return card.dataset.authors.includes(authorQuery)
+            && (preprintCheckbox.checked || card.dataset.isPreprint !== "true")
+            && (excludedSelect === venueSelect || !venueSelect.value || card.dataset.venue.split("|").includes(venueSelect.value.toLocaleLowerCase()))
+            && (excludedSelect === yearSelect || !yearSelect.value || card.dataset.year === yearSelect.value)
+            && (excludedSelect === typeSelect || !typeSelect.value || card.dataset.type.split("|").includes(typeSelect.value.toLocaleLowerCase()))
+            && (excludedSelect === tagSelect || !tagSelect.value || card.dataset.tags.split("|").includes(tagSelect.value.toLocaleLowerCase()));
+    };
+    const updateFilterCounts = () => {
+        countedFilters.forEach(({ select, getValues }) => {
+            const matchingCards = cards.filter(card => matchesFilters(card, select));
+            const counts = getLabelCounts(matchingCards.map(getValues));
+
+            Array.from(select.options).forEach(option => {
+                const count = option.value ? counts.get(option.value.toLocaleLowerCase()) || 0 : matchingCards.length;
+                option.textContent = `${option.dataset.label} (${count})`;
+            });
+            select.parentElement.querySelector(".publication-filter-selected-label").textContent =
+                select.selectedOptions[0].dataset.label;
+        });
+    };
+    const applyFilters = () => {
         let visibleCount = 0;
 
         cards.forEach(card => {
-            const matches = card.dataset.authors.includes(authorQuery)
-                && (!venueSelect.value || card.dataset.venue.split("|").includes(venueSelect.value.toLocaleLowerCase()))
-                && (!yearSelect.value || card.dataset.year === yearSelect.value)
-                && (!typeSelect.value || card.dataset.type.split("|").includes(typeSelect.value.toLocaleLowerCase()))
-                && (!tagSelect.value || card.dataset.tags.split("|").includes(tagSelect.value.toLocaleLowerCase()));
+            const matches = matchesFilters(card);
 
             card.hidden = !matches;
             if (matches) visibleCount += 1;
         });
 
+        updateFilterCounts();
+        publicationCount.textContent = `${visibleCount} ${visibleCount === 1 ? "Publication" : "Publications"} Found`;
         groups.forEach(group => {
             const hasVisibleCards = group.querySelector(".publication-item:not([hidden])");
             group.hidden = !hasVisibleCards;
@@ -268,6 +317,7 @@ if (publicationRoot) {
     };
 
     authorInput.addEventListener("input", applyFilters);
+    preprintCheckbox.addEventListener("change", applyFilters);
     [venueSelect, yearSelect, typeSelect, tagSelect].forEach(select => select.addEventListener("change", applyFilters));
     applyFilters();
 }

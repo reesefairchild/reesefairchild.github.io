@@ -12,16 +12,15 @@ description: We evaluate how researchers evaluate inline citations in peer revie
 link: https://arxiv.org/abs/2610.05355
 pdf: https://arxiv.org/pdf/2610.05355
 tags:
-  - Research Processes
   - Peer Review
   - Artificial Intelligence
-  - Survey Study
 title: Rethinking Inline Citation Verification in Scholarly Communication
+is_preprint: yes
 venue: arXiv
 venue_tags:
   - arXiv
 type:
-  - Preprint
+  - Full Paper
 doi: https://doi.org/10.48550/arXiv.2610.05355
 year: 2026
 date: 10-06

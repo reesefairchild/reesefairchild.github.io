@@ -12,6 +12,7 @@ tags:
   - Visualization
   - Artificial Intelligence
 title: Insert title here
+is_preprint: yes
 type:
   - Conference
   - Preprint

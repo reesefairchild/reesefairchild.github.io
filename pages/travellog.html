@@ -93,10 +93,24 @@
 
   .slider-wrap {
     display: grid;
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
     align-items: end;
     column-gap: 0.85rem;
   }
+
+  .playback-button {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 0.68rem;
+    cursor: pointer;
+  }
+
+  .playback-button:focus-visible { outline: 2px solid var(--ink); }
+  .playback-button:disabled { cursor: default; opacity: 0.5; }
 
   .timeline-edge {
     font-size: 0.68rem;
@@ -196,6 +210,7 @@
   <div class="timeline">
     <div class="slider-wrap">
       <span id="flight-timeline-start" class="timeline-edge"></span>
+      <button id="flight-playback" class="playback-button" type="button" aria-controls="flight-slider" disabled>Play</button>
       <div class="slider-track">
         <div id="flight-slider-selected" class="slider-selected"></div>
         <input id="flight-slider" class="slider" type="range">
@@ -229,6 +244,8 @@
         { "from": "SEA", "to": "PSC", "date": "2025-12-13", "flight_code": "AS2016" },
         { "from": "PSC", "to": "SEA", "date": "2026-01-03", "flight_code": "AS2366" },
         { "from": "SEA", "to": "PSC", "date": "2026-03-20", "flight_code": "AS2100" },
+        { "from": "SEA", "to": "PSC", "date": "2026-11-24", "flight_code": "AS2350" },
+        { "from": "PSC", "to": "SEA", "date": "2026-11-29", "flight_code": "AS2247" }
   ].map(flight => ({ ...flight, parsedDate: new Date(`${flight.date}T12:00:00`) }));
 
   const AIRPORT_NOTES = {
@@ -243,6 +260,7 @@
 
   const container = d3.select("#flight-map");
   const slider = d3.select("#flight-slider");
+  const playbackButton = d3.select("#flight-playback");
   const sliderSelected = d3.select("#flight-slider-selected");
   const timelineStartLabel = d3.select("#flight-timeline-start");
   const timelineEnd = d3.select("#flight-timeline-end");
@@ -254,13 +272,14 @@
 
   const timelineStart = new Date(Math.min(...flights.map(f => f.parsedDate)));
   const timelineEndDate = new Date(Math.max(...flights.map(f => f.parsedDate)));
-  const millisPerDay = 24 * 60 * 60 * 1000;
+  const millisPerDay = 24 * 60 * 60 * 6000;
   const sliderMax = Math.max(0, Math.floor((timelineEndDate - timelineStart) / millisPerDay));
   const sliderThumbSize = 14;
 
   let svg, projection, path, coordLookup = {}, labelLayer, markerLayer, routeLayer;
   let cachedWorld = null;
   let currentSelectedDate = timelineEndDate;
+  let playbackInterval = null;
 
   function haversineDistance(coord1, coord2) {
     const toRad = d => d * Math.PI / 180;
@@ -281,6 +300,14 @@
 
   function sliderValueToDate(value) {
     return new Date(timelineStart.getTime() + Number(value) * millisPerDay);
+  }
+
+  function stopPlayback() {
+    if (playbackInterval !== null) {
+      window.clearInterval(playbackInterval);
+      playbackInterval = null;
+    }
+    playbackButton.text("Play");
   }
 
   function routeKey(from, to) {
@@ -519,6 +546,26 @@
     slider.on("input", function () {
       updateRouteVisibility(sliderValueToDate(this.value));
     });
+
+    playbackButton
+      .property("disabled", false)
+      .on("click", function () {
+        if (playbackInterval !== null) {
+          stopPlayback();
+          return;
+        }
+
+        if (Number(slider.property("value")) >= sliderMax) {
+          slider.property("value", 0).dispatch("input");
+        }
+
+        playbackButton.text("Pause");
+        playbackInterval = window.setInterval(() => {
+          const nextValue = Number(slider.property("value")) + 1;
+          slider.property("value", Math.min(nextValue, sliderMax)).dispatch("input");
+          if (nextValue >= sliderMax) stopPlayback();
+        }, 100);
+      });
 
     return d3.json(worldURL);
   }).then(world => {

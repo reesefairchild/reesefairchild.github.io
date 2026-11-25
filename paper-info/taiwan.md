@@ -6,9 +6,9 @@ authors:
 description: We use neural networks to optimize a biochemical reaction producing polyhydroxyalkanoates, which have potential usage in producing compostable, biodegradable plastics.
 pdf: misc_docs/iipReport.pdf
 tags:
-  - Neural Networks
   - Chemical Engineering
 title: Biochemical Process Optimization with Simulated Annealing and Artificial Neural Networks
+is_preprint: no
 type:
   - Other
 venue: Not Published; Report Submitted to the National Science and Technology Council of Taiwan
